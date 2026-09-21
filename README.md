@@ -17,15 +17,15 @@ Copernicus monitorea espejos de agua por satélite (Sentinel-2). El satélite es
 Este dossier NO es un diseño propio: es la guía en castellano para construir el
 **DockEye** del COAST Lab (EE.UU.), un diseño abierto y publicado, usando de
 manual complementario el **fluorómetro del ENSSAT** (Francia, escuela de
-fotónica). Ambos repos completos están (o se clonan) en `vendor/`:
+fotónica).
+
+**DockEye viene incluido en este repo** (`vendor/DockEye/`, licencia MIT —
+STLs del gabinete en `vendor/DockEye/Hardware/Housing/`, firmware en
+`vendor/DockEye/Firmware/`). El ENSSAT, por su tamaño, se descarga aparte:
 
 ```bash
-./descargar-fuentes.sh   # los clona en vendor/ pineados a los commits de referencia
+./descargar-fuentes.sh   # clona ENSSAT en vendor/ pineado al commit de referencia
 ```
-
-> Los diseños originales no se redistribuyen acá (ver [LICENSE.md](LICENSE.md)):
-> se descargan directo de sus repos. Los **STL del gabinete** quedan en
-> `vendor/DockEye/Hardware/Housing/`.
 
 Commits de referencia usados para este dossier (2026-09-21):
 

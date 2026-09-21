@@ -13,13 +13,14 @@ Texto legal: https://creativecommons.org/licenses/by-sa/4.0/deed.es
   (https://github.com/EstebanKovacevic), aportado a este proyecto. **CC BY-SA 4.0**,
   misma licencia que el dossier. No deriva del archivo de DockEye: lo reemplaza.
 
-## Los diseños originales (NO incluidos en este repo, se descargan con `descargar-fuentes.sh`)
+## Los diseños originales
 
-- **DockEye** (COAST Lab): su repositorio no declara licencia — todos los
-  derechos reservados a sus autores. Por eso este repo **no redistribuye** sus
-  STL ni su firmware: se clonan directo del origen. El uso para construcción
-  propia corre por cuenta de cada constructor.
+- **DockEye** (COAST Lab): **MIT** (licencia agregada 2026-09-21 a pedido de
+  este proyecto — [issue #11](https://github.com/COAST-Lab/DockEye/issues/11)).
+  Incluido completo en `vendor/DockEye/` (commit de referencia
+  `aea70d6`, con su [LICENSE](vendor/DockEye/LICENSE)). © COAST Lab.
 - **Chlorophyll-Fluorometer** (ENSSAT / Univ. Rennes): **CC BY-SA 4.0**.
+  No incluido (pesa >60 MB): se descarga con `descargar-fuentes.sh`.
 
 ## Papers de referencia
 
