@@ -20,10 +20,12 @@ manual complementario el **fluorómetro del ENSSAT** (Francia, escuela de
 fotónica). Ambos repos completos están (o se clonan) en `vendor/`:
 
 ```bash
-cd vendor
-git clone https://github.com/COAST-Lab/DockEye
-git clone https://github.com/EnssatPhotonicsProjects/Chlorophyll-Fluorometer
+./descargar-fuentes.sh   # los clona en vendor/ pineados a los commits de referencia
 ```
+
+> Los diseños originales no se redistribuyen acá (ver [LICENSE.md](LICENSE.md)):
+> se descargan directo de sus repos. Los **STL del gabinete** quedan en
+> `vendor/DockEye/Hardware/Housing/`.
 
 Commits de referencia usados para este dossier (2026-09-21):
 
