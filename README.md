@@ -20,8 +20,9 @@ manual complementario el **fluorómetro del ENSSAT** (Francia, escuela de
 fotónica).
 
 **DockEye viene incluido en este repo** (`vendor/DockEye/`, licencia MIT —
-STLs del gabinete en `vendor/DockEye/Hardware/Housing/`, firmware en
-`vendor/DockEye/Firmware/`). El ENSSAT, por su tamaño, se descarga aparte:
+firmware en `vendor/DockEye/Firmware/`, y el set imprimible listo para usar
+en [`planos/`](planos/): gabinete v9 + tapa). El ENSSAT, por su tamaño, se
+descarga aparte:
 
 ```bash
 ./descargar-fuentes.sh   # clona ENSSAT en vendor/ pineado al commit de referencia
