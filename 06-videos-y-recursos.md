@@ -33,7 +33,7 @@ una: una guía escrita de referencia + qué buscar en YouTube.
   no hace falta entender el protocolo, solo conectar según tabla.
 
 ### 4. Imprimir el gabinete 3D
-- El STL está incluido en este repo: `vendor/DockEye/Hardware/Housing/` (usar la v9). La tapa imprimible es la nuestra: `planos/tapa-v1.stl`.
+- El set imprimible completo está en `planos/`: `gabinete-dockeye-v9.stl` + `tapa-v1.stl`.
 - Búsqueda YouTube: `imprimir STL cura tutorial español`
 - Sin impresora propia: cualquier servicio de impresión 3D lo cotiza con el
   STL (parámetros en el doc 02: PLA/PETG negro opaco, relleno ≥50%).

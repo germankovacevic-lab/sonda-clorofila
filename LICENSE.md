@@ -7,11 +7,14 @@ Podés copiar, adaptar y redistribuir este material, incluso comercialmente,
 con atribución a **Copernicus (copernicus.com.ar)** y manteniendo esta licencia.
 Texto legal: https://creativecommons.org/licenses/by-sa/4.0/deed.es
 
-## Piezas 3D propias (`planos/`)
+## Piezas 3D (`planos/`)
 
 - `tapa-v1.stl` — diseño original de **Esteban Kovacevic**
   (https://github.com/EstebanKovacevic), aportado a este proyecto. **CC BY-SA 4.0**,
   misma licencia que el dossier. No deriva del archivo de DockEye: lo reemplaza.
+- `gabinete-dockeye-v9.stl` — copia de
+  `vendor/DockEye/Hardware/Housing/Open-Fluorometer-Main-Housing v9.stl`,
+  © COAST Lab, **MIT**. Puesta acá para tener el set imprimible en un solo lugar.
 
 ## Los diseños originales
 

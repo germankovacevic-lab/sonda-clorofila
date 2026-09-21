@@ -86,9 +86,9 @@ Si se arma con sustitutos (ver doc 01), el mapa equivalente:
 
 ### 3.1 Qué imprimir
 
-De `vendor/DockEye/Hardware/Housing/`:
+Las dos piezas están juntas en [`planos/`](planos/):
 
-- **`Open-Fluorometer-Main-Housing v9.stl`** — cuerpo principal (portacubeta + posiciones de LEDs y sensor). Usar la v9 (última versión; v7 y v8 son iteraciones anteriores).
+- **[`planos/gabinete-dockeye-v9.stl`](planos/gabinete-dockeye-v9.stl)** — cuerpo principal (portacubeta + posiciones de LEDs y sensor). Es la v9 de DockEye, la última versión (el original y sus iteraciones v7/v8 están en `vendor/DockEye/Hardware/Housing/`).
 - **Tapa: RESUELTA — usar [`planos/tapa-v1.stl`](planos/tapa-v1.stl) de este repo.** Diseño original de [Esteban Kovacevic](https://github.com/EstebanKovacevic) (CC BY-SA 4.0), creado porque la tapa de DockEye solo existe como `.f3d` de Fusion 360 y no se podía imprimir tal como estaba.
 
 Parámetros: PLA o PETG **negro opaco**, relleno ≥50%, capa 0,2 mm. Verificar a contraluz que las paredes no transluzcan; si transluce, pintar de negro por dentro o subir perímetros.

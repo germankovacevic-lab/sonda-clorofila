@@ -47,7 +47,7 @@ no es clara, el punto está marcado **A VERIFICAR**.
 | [04-protocolo-de-uso.md](04-protocolo-de-uso.md) | Cómo medir: muestra, blanco, registro, calibración |
 | [05-pruebas-de-aceptacion.md](05-pruebas-de-aceptacion.md) | Checklist de entrega: qué tiene que demostrar el aparato terminado |
 | [06-videos-y-recursos.md](06-videos-y-recursos.md) | Videos y recursos de apoyo por habilidad; el armado de la unidad #1 será filmado |
-| [planos/](planos/) | Piezas 3D propias de este proyecto: **tapa v1** (diseño: [Esteban Kovacevic](https://github.com/EstebanKovacevic)) — el cuerpo principal se descarga de DockEye con `descargar-fuentes.sh` |
+| [planos/](planos/) | El set imprimible completo: **gabinete v9** (DockEye, MIT) + **tapa v1** (diseño: [Esteban Kovacevic](https://github.com/EstebanKovacevic), CC BY-SA) |
 
 ## Resumen del hardware (arquitectura)
 
