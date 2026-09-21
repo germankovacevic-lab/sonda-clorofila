@@ -7,6 +7,12 @@ Podés copiar, adaptar y redistribuir este material, incluso comercialmente,
 con atribución a **Copernicus (copernicus.com.ar)** y manteniendo esta licencia.
 Texto legal: https://creativecommons.org/licenses/by-sa/4.0/deed.es
 
+## Piezas 3D propias (`planos/`)
+
+- `tapa-v1.stl` — diseño original de **Esteban Kovacevic**
+  (https://github.com/EstebanKovacevic), aportado a este proyecto. **CC BY-SA 4.0**,
+  misma licencia que el dossier. No deriva del archivo de DockEye: lo reemplaza.
+
 ## Los diseños originales (NO incluidos en este repo, se descargan con `descargar-fuentes.sh`)
 
 - **DockEye** (COAST Lab): su repositorio no declara licencia — todos los
