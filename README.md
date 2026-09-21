@@ -46,6 +46,7 @@ no es clara, el punto está marcado **A VERIFICAR**.
 | [03-firmware.md](03-firmware.md) | Cómo cargar el programa al ESP32 y verificar que todo responde |
 | [04-protocolo-de-uso.md](04-protocolo-de-uso.md) | Cómo medir: muestra, blanco, registro, calibración |
 | [05-pruebas-de-aceptacion.md](05-pruebas-de-aceptacion.md) | Checklist de entrega: qué tiene que demostrar el aparato terminado |
+| [06-videos-y-recursos.md](06-videos-y-recursos.md) | Videos y recursos de apoyo por habilidad; el armado de la unidad #1 será filmado |
 
 ## Resumen del hardware (arquitectura)
 
