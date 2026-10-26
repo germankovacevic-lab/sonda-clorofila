@@ -26,7 +26,7 @@ con 4 caras transparentes.
 1. Homogeneizar la muestra (invertir el frasco suavemente 10 veces; no agitar violento, hace burbujas).
 2. Enjuagar la cubeta 2 veces con la propia muestra; llenar a ~3/4. **Sin burbujas** en las caras ópticas; secar el exterior con papel suave (huellas y gotas desvían luz).
 3. Insertar la cubeta en el gabinete, cerrar la tapa.
-4. Encender el aparato (o RESET). Corre solo: 2 parpadeos → 60 s de LED azul → 3 parpadeos → 60 s de LED IR → resumen. Total ~2,5 min.
+4. Encender el aparato (o RESET). Corre solo: 60 s de fondo a oscuras → 60 s de LED azul → 60 s de LED IR → resumen (LED indicador encendido = listo). Total ~3,5 min.
 5. Apagar, retirar cubeta, enjuagar con agua destilada.
 
 ### 2.3 Blanco
@@ -35,7 +35,7 @@ idéntica con **agua destilada**. Ese valor es el cero del día y baja junto con
 los datos.
 
 ### 2.4 Registro
-- Los datos quedan en `Test.csv` de la microSD. **Renombrar el archivo tras cada corrida** (ej. `2026-09-21_laguna-X_p1.csv`), porque el firmware agrega al mismo archivo.
+- Los datos quedan en `Test AAAA-MM-DD.csv` de la microSD (un archivo por día). El firmware agrega al archivo del día en cada corrida: **anotar la hora de cada muestra** en la hoja de campo y separar las corridas por la columna de fecha/hora (o renombrar el archivo entre corridas, ej. `2026-10-26_laguna-X_p1.csv`).
 - Llevar planilla paralela: fecha/hora, punto, blanco del día, archivo asociado, observaciones (color del agua, clima).
 - El valor que interesa: en el bloque `SUMMARY`, la resta `Chl − Turb F8` (señal de fluorescencia corregida por fondo) y la `Calibrated Chlorophyll-a` **solo si ya se cargó nuestra ecuación de calibración** (ver §3.4).
 
@@ -64,22 +64,24 @@ Diluir en acetona al 80% para obtener 5 puntos: **100, 50, 20, 10 y 5 µg/L**
 3. En planilla (Excel/LibreOffice): graficar señal (promedio F8 con LED azul, menos fondo) vs. concentración. Ajustar recta: `señal = a × concentración + b`. Debe dar R² > 0,95; si no, revisar burbujas, luz externa, cubeta sucia.
 
 ### 3.4 Cargar la calibración al firmware
-Invertir la recta y reemplazar en el .ino (línea ~114):
+Invertir la recta y reemplazar en el .ino (buscar `calibrated_chla` en el bloque de resumen):
 ```cpp
-float calibrated_chla = 0.1332 * diff - 1.7127;  // ← ecuación de DockEye, NO la nuestra
+float calibrated_chla = 0.0871 * chlDiff - 1.3054;  // ← ecuación de DockEye, NO la nuestra
 ```
 por los coeficientes propios (`chla = (diff − b) / a`). Anotar fecha de
 calibración y coeficientes en la hoja del instrumento. Re-flashear.
 
-> Nota: los números 0,1332 y −1,7127 que trae el código son la calibración del
+> Nota: los números 0,0871 y −1,3054 que trae el código son la calibración del
 > prototipo de COAST-Lab. **Sin recalibrar, las lecturas "calibradas" de nuestro
 > aparato no son confiables** — sí lo son las cuentas crudas y sus diferencias.
 
 ### 3.5 Turbidez
-DockEye no publica protocolo de calibración de turbidez (el canal NIR se usa
-sobre todo como fondo para la clorofila). Si se quiere turbidez en NTU:
-calibrar con estándares de formazina o suspensiones caseras validadas —
-**A VERIFICAR / fase 2**, no bloquea la entrega.
+El firmware 2026 trae una recta de turbidez en NTU
+(`calibrated_turb = 0.0081 * turbDiff - 11.787`) — también es la calibración
+del prototipo de COAST-Lab. Para turbidez propia en NTU: calibrar con
+estándares de formazina o suspensiones caseras validadas y reemplazar esos
+coeficientes igual que en §3.4 — **A VERIFICAR / fase 2**, no bloquea la
+entrega.
 
 ## 4. Mantenimiento
 

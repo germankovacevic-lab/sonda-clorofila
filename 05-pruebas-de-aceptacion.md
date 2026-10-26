@@ -27,7 +27,7 @@ gotas, para simular turbidez), las cubetas del kit, linterna.
 
 - [ ] **P3.1** Durante la fase clorofila se ve el LED azul encendido (tapa abierta, cubeta afuera).
 - [ ] **P3.2** Durante la fase turbidez, la cámara del celular ve el LED IR encendido.
-- [ ] **P3.3** El LED indicador (si se montó) parpadea 2 veces al inicio, entre fases y al final.
+- [ ] **P3.3** El LED indicador (si se montó) se enciende al terminar la secuencia completa.
 
 ## P4 — El sensor ve los LEDs (prueba de canal)
 
@@ -35,7 +35,7 @@ Con cubeta llena de **agua destilada**, gabinete cerrado, correr una medición c
 
 - [ ] **P4.1** Durante la fase clorofila (filas "Chlorophyll-a"), el canal **F1 (415 nm, primera columna de cuentas)** registra valores claramente mayores que con el aparato apagado → el sensor está viendo el LED azul (por dispersión residual). *Si F1 está clavado en 65535, hay demasiada luz directa: revisar geometría.*
 - [ ] **P4.2** Durante la fase turbidez (filas "Turbidity"), el canal **NIR (última columna)** sube respecto del fondo.
-- [ ] **P4.3** Ningún canal clavado en 65535 (saturación) ni todo en 0 (sensor tapado / LED muerto) durante las dos fases.
+- [ ] **P4.3** Ningún canal clavado en 65535 (saturación) durante las fases con LED, ni todo en 0 con LED encendido (sensor tapado / LED muerto). En la fase de fondo, valores ~0 con la tapa puesta = correcto.
 
 Guardar como `P4_agua-destilada.csv`.
 

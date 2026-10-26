@@ -28,9 +28,13 @@ descarga aparte:
 ./descargar-fuentes.sh   # clona ENSSAT en vendor/ pineado al commit de referencia
 ```
 
-Commits de referencia usados para este dossier (2026-09-21):
+Commits de referencia usados para este dossier:
 
-- DockEye: `aea70d69787ee7859948dcfca584f06a7d0c6c92` (2025-07-14)
+- DockEye: `0eb950069c56576696d1c5a44f537b9666f87d99` (2026-10-26 — trae el
+  firmware estable `DockEye_050226.ino` con la medición de fondo corregida,
+  los datos de calibración 2025-2026 del lab y un rediseño del gabinete aún
+  sin documentar en `vendor/DockEye/Hardware/Housing/`; el dossier de armado
+  sigue sobre el gabinete v9 hasta que COAST-Lab publique su guía)
 - ENSSAT: `876ba0dcd2a57655762b38ec11ed856d72429feb` (2025-07-17)
 
 **Ante cualquier duda, la fuente manda**: el código, los STL y los README de

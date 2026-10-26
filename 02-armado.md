@@ -1,7 +1,7 @@
 # 02 · Guía de armado
 
 > Fuente: README de `vendor/DockEye/` (sección *Wiring Instructions*) + firmware
-> `vendor/DockEye/Firmware/Open_Fluorometer/DockEye.ino` + manual de ensamble de
+> `vendor/DockEye/Firmware/DockEye/DockEye_stable/DockEye_050226.ino` + manual de ensamble de
 > `vendor/Chlorophyll-Fluorometer/` (ENSSAT) como referencia de buenas prácticas.
 >
 > El original advierte: *"Instructions for mounting the LEDs and light sensor to
@@ -57,7 +57,7 @@ Del README de DockEye:
 
 - El Adalogger (RTC + SD) no lleva cables: se **apila** sobre el Feather. El firmware espera la SD en chip-select **10** (constante `SD_CHIP_SELECT = 10` del .ino), que es el CS del Adalogger apilado.
 - El AW9523 en modo LED actúa de sumidero de corriente constante (~37 mA por pin): por eso los LEDs van del riel + al pin del AW9523, **sin resistencia**.
-- El firmware además maneja un **LED en el pin 3 del AW9523 como indicador** (parpadea para marcar inicio/fin de cada fase; función `blinkLED`). El README de wiring no lo menciona. **A VERIFICAR / decisión práctica:** conectar un LED común (cualquier color) + al riel +, − al pin 3 del AW9523, montado visible en el gabinete. Si no se conecta, el aparato funciona igual pero sin señal visual de progreso.
+- El firmware además maneja un **LED en el pin 3 del AW9523 como indicador** (en el firmware 2026 se enciende al terminar la secuencia completa, como señal de "medición lista"). El README de wiring no lo menciona. **A VERIFICAR / decisión práctica:** conectar un LED común (cualquier color) + al riel +, − al pin 3 del AW9523, montado visible en el gabinete. Si no se conecta, el aparato funciona igual pero sin señal visual de progreso.
 - Direcciones I²C que espera el firmware: AS7341 en `0x39`, AW9523 en `0x58` (defaults de ambos módulos; no tocar jumpers de dirección).
 
 ### 2.2 Tabla de conexiones — versión "todo local" (devkit ESP32-S3 + módulos sueltos)

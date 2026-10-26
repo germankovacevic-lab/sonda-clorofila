@@ -21,7 +21,7 @@ Texto legal: https://creativecommons.org/licenses/by-sa/4.0/deed.es
 - **DockEye** (COAST Lab): **MIT** (licencia agregada 2026-09-21 a pedido de
   este proyecto — [issue #11](https://github.com/COAST-Lab/DockEye/issues/11)).
   Incluido completo en `vendor/DockEye/` (commit de referencia
-  `aea70d6`, con su [LICENSE](vendor/DockEye/LICENSE)). © COAST Lab.
+  `0eb9500`, con su [LICENSE](vendor/DockEye/LICENSE)). © COAST Lab.
 - **Chlorophyll-Fluorometer** (ENSSAT / Univ. Rennes): **CC BY-SA 4.0**.
   No incluido (pesa >60 MB): se descarga con `descargar-fuentes.sh`.
 

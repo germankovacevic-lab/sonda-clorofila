@@ -10,11 +10,16 @@ File myFile;
 
 float sumChlF8 = 0;
 int countChlF8 = 0;
+float sumBG_F8 = 0;
+int countBG_F8 = 0;
 
-float sumTurbF8 = 0;
-int countTurbF8 = 0;
+float sumTurbNIR = 0;
+int countTurbNIR = 0;
+float sumBG_NIR = 0;
+int countBG_NIR = 0;
 
 float calibrated_chla = 0;
+float calibrated_turb = 0;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 const int SD_CHIP_SELECT = 10;
@@ -68,7 +73,7 @@ void setup() {
 
   SD.begin(SD_CHIP_SELECT);
 
-  File file = SD.open("Test.csv", FILE_WRITE);
+  File file = SD.open("DockEye Measurements.csv", FILE_WRITE);
 
   if (file) {
     file.println("Date and Time,ASTEP,ATIME,GAIN,LED Status,LED Intensity,Test,Seconds,Milliseconds,Type,F1 (Basic),F2 (Basic),F3 (Basic),F4 (Basic),F5 (Basic),F6 (Basic),F7 (Basic),F8 (Basic),Clear (Basic),NIR (Basic),Type,F1 (Raw),F2 (Raw),F3 (Raw),F4 (Raw),F5 (Raw),F6 (Raw),F7 (Raw),F8 (Raw),Clear (Raw),NIR (Raw),Measurement Type"); // Updated Headers
@@ -106,41 +111,64 @@ void loop() {
   aw.analogWrite(LedPins[2], LEDbright);
 
   // Final summary
-if (countChlF8 > 0 && countTurbF8 > 0) {
+if (countChlF8 > 0 && countBG_F8 > 0 && countTurbNIR > 0 && countBG_NIR > 0) {
+  // chlorophyll-a calculations
   float avgChlF8 = sumChlF8 / countChlF8;
-  float avgTurbF8 = sumTurbF8 / countTurbF8;
-  float diff = avgChlF8 - avgTurbF8;
-  //calibration equation 
-  float calibrated_chla = 0.1332 * diff - 1.7127;
+  float avgBG_F8 = sumBG_F8 / countBG_F8;
+  float chlDiff = avgChlF8 - avgBG_F8;
+  
+  // turbidity calculations
+  float avgTurbNIR = sumTurbNIR / countTurbNIR;
+  float avgBG_NIR = sumBG_NIR / countBG_NIR;
+  float turbDiff = avgTurbNIR - avgBG_NIR;
+
+  // chlorophyll-a calibration equation (jan 2026)
+  float calibrated_chla = 0.0871 * chlDiff - 1.3054;
+  // turbidity calibration equation (feb 2026)
+  float calibrated_turb = 0.0081 * turbDiff - 11.787;
 
   // Log one final summary row to SD
-    File file = SD.open("Test.csv", FILE_WRITE);
+    File file = SD.open("DockEye Measurements.csv", FILE_WRITE);
     if (file) {
       file.println("SUMMARY");
-      file.print("Average F8 Raw Chlorophyll,");
+      file.print("Average F8 Raw Counts,");
       file.println(avgChlF8);
-      file.print("Average F8 Raw Turbidity,");
-      file.println(avgTurbF8);
-      file.print("Chl - Turb F8,");
-      file.println(diff);
+      file.print("Average F8 NIR/Background,");
+      file.println(avgBG_F8);
+      file.print("Measured F8 - BG F8,");
+      file.println(chlDiff);
       file.print("Calibrated Chlorophyll-a,");
       file.println(calibrated_chla);
+      file.print("Average NIR Raw Counts,");
+      file.println(avgTurbNIR);
+      file.print("Average F8/BG Raw Counts,");
+      file.println(avgBG_F8);
+      file.print("Measured NIR - BG NIR,");
+      file.println(turbDiff);
       file.close();
     }
 
     // Print to serial
     Serial.println("==== FINAL AVERAGE RESULTS ====");
-    Serial.print("Chlorophyll-a Avg. Raw Fluorescence (counts): "); 
+    Serial.print("F8 Avg. Raw Counts: "); 
     Serial.println(avgChlF8);
-    Serial.print("Avg. Background (counts): "); 
-    Serial.println(avgTurbF8);
-    Serial.print("Background Subtracted Fluorescence (counts): "); 
-    Serial.println(diff);
+    Serial.print("Avg. Background Counts: "); 
+    Serial.println(avgBG_F8);
+    Serial.print("Background Subtracted F8 Counts: "); 
+    Serial.println(chlDiff);
     Serial.print("Calibrated Chlorophyll-a (μg/L): "); 
     Serial.println(calibrated_chla);
     Serial.println("================================");
+    Serial.print("NIR Avg. Raw Counts: "); 
+    Serial.println(avgTurbNIR);
+    Serial.print("Avg. Background Counts: "); 
+    Serial.println(avgBG_NIR);
+    Serial.print("Background Subtracted NIR Counts: "); 
+    Serial.println(turbDiff);
+    Serial.print("Calibrated Turbidity (NTU): "); 
+    Serial.println(calibrated_turb);
+    Serial.println("================================");
   }
-
 
   while (1) {
     delay(1);
@@ -198,7 +226,7 @@ void turnOnLED(uint8_t ledIndex, unsigned long duration, const char* measurement
 }
 
 void fileprintresults(SdFat &sd, RTC_PCF8523 &rtc, const char* measurementType) {
-  File file = sd.open("Test.csv", FILE_WRITE);
+  File file = sd.open("DockEye Measurements.csv", FILE_WRITE);
   DateTime now = rtc.now();
 
   uint16_t readings[12];
@@ -312,10 +340,25 @@ void serialprintresults(RTC_PCF8523 &rtc, const char* measurementType) {
     Serial.println(readings[9]);
     sumChlF8 += readings[9];
     countChlF8++;
+    sumBG_NIR += readings[11];
+    countBG_NIR++;
   } else if (strcmp(measurementType, "Turbidity") == 0) {
     Serial.print("Raw NIR: ");
     Serial.println(readings[11]);
-    sumTurbF8 += readings[9];
-    countTurbF8++;
+    sumTurbNIR += readings[11];
+    countTurbNIR++;
+    sumBG_F8 += readings[9];
+    countBG_F8++;
+  } else if (strcmp(measurementType, "Background") == 0) {
+    Serial.print("Raw F8: ");
+    Serial.println(readings[9]);
+    sumChl_BG += readings[9];  
+    countChl_BG++;
+    Serial.print("Raw NIR: ");
+    Serial.println(readings[11]);
+    sumTurb_BG += readings[11]; 
+    countTurb_BG++;
   }
+}
+
 }

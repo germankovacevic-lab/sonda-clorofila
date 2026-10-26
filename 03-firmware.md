@@ -1,18 +1,27 @@
 # 03 · Firmware: carga y verificación
 
-> Fuente: `vendor/DockEye/Firmware/Open_Fluorometer/DockEye.ino` y
-> `vendor/DockEye/Firmware/README.md`. El firmware es UN solo archivo .ino.
+> Fuente: `vendor/DockEye/Firmware/DockEye/DockEye_stable/DockEye_050226.ino`.
+> El firmware es UN solo archivo .ino.
+>
+> **Actualización 2026-10-26:** COAST-Lab publicó el firmware que usan en campo
+> desde hace meses (`DockEye_050226.ino`). Corrige un error en la lógica de
+> medición de fondo del firmware original (que estimaba el fondo de la clorofila
+> con el LED IR encendido) agregando una **fase de fondo a oscuras** propia de
+> cada corrida. El firmware viejo quedó en `.../DockEye_stable/old/` — **no
+> usarlo**. Fuente: respuesta de Adam Lucas (COAST-Lab) en el
+> [issue #11](https://github.com/COAST-Lab/DockEye/issues/11).
 
 ## 1. Qué hace el firmware (para entender qué esperar)
 
-Al encender, el aparato ejecuta **una** secuencia completa y se queda quieto:
+Al encender, el aparato ejecuta **una** secuencia completa (~3 minutos) y se queda quieto:
 
-1. Inicializa sensor AS7341, RTC y driver AW9523. Si alguno no responde, **se frena** e imprime el error por el puerto serie.
-2. Crea/abre `Test.csv` en la SD y escribe el encabezado.
-3. Parpadea el LED indicador 2 veces → **fase clorofila**: enciende el LED azul 60 segundos, midiendo y grabando continuamente los 10 canales del sensor.
-4. Parpadea 3 veces → **fase turbidez**: enciende el LED infrarrojo 60 segundos, ídem.
-5. Escribe en la SD un bloque `SUMMARY` con: promedio F8 con LED azul, promedio F8 con LED IR (fondo), la resta, y la clorofila-a calibrada con la ecuación `chla = 0,1332 × diff − 1,7127` (⚠️ esa ecuación es la calibración del aparato de ELLOS: para el nuestro se reemplaza tras calibrar — doc 04).
-6. Queda en bucle infinito hasta que se lo apague y prenda de nuevo.
+1. Inicializa sensor AS7341, RTC y driver AW9523. Si alguno no responde, **se frena** e imprime el error por el puerto serie. Si el RTC está sin hora (primera vez o pila agotada), lo pone automáticamente a la hora de compilación del firmware.
+2. Crea/abre en la SD un CSV con la fecha del día (`Test AAAA-MM-DD.csv`) y escribe el encabezado. Las corridas del mismo día se agregan al mismo archivo.
+3. **Fase fondo**: 60 segundos con **todos los LEDs apagados**, midiendo y grabando continuamente los 10 canales del sensor. Es la medición de luz ambiente que se resta después; con la tapa puesta debería dar ~0 cuentas (salvo sol directo).
+4. **Fase clorofila**: LED azul encendido 60 segundos, ídem.
+5. **Fase turbidez**: LED infrarrojo encendido 60 segundos, ídem.
+6. Escribe en la SD un bloque `SUMMARY` con, para cada variable, el promedio crudo, el promedio del fondo, la resta, y el valor calibrado: `chla = 0,0871 × diff − 1,3054` y `turbidez (NTU) = 0,0081 × diff − 11,787` (⚠️ esas ecuaciones son la calibración del aparato de ELLOS: para el nuestro se reemplazan tras calibrar — doc 04). Enciende el LED indicador.
+7. Queda en bucle infinito hasta que se lo apague y prenda de nuevo.
 
 Cada medición vuelca por el puerto serie (9600 baudios) una barra de progreso y los valores crudos: eso es lo que se usa para verificar.
 
@@ -40,21 +49,21 @@ Cada medición vuelca por el puerto serie (9600 baudios) una barra de progreso y
 
 ## 3. Ajustes al .ino según el hardware armado
 
-Abrir `vendor/DockEye/Firmware/Open_Fluorometer/DockEye.ino` y guardarlo como copia de trabajo (ej. `firmware-sonda/sonda.ino` — no editar el vendor). Ajustes:
+Abrir `vendor/DockEye/Firmware/DockEye/DockEye_stable/DockEye_050226.ino` y guardarlo como copia de trabajo (ej. `firmware-sonda/sonda.ino` — no editar el vendor). Ajustes:
 
 ### 3.1 Si se armó la versión original (Feather+Adalogger+AW9523)
 Nada que tocar. Flashear tal cual.
 
 ### 3.2 Si se usa RTC DS3231 en vez del Adalogger
 ```cpp
-// línea 8:  RTC_PCF8523 rtc;   →
+// RTC_PCF8523 rtc;   →
 RTC_DS3231 rtc;
 ```
-y más abajo, `rtc.initialized()` no existe para DS3231: reemplazar ese chequeo por `rtc.lostPower()`.
+y en el `setup()`, `rtc.initialized()` no existe para DS3231: dejar el chequeo solo con `rtc.lostPower()`.
 
 ### 3.3 Si el CS de la microSD no es el pin 10
 ```cpp
-// línea 20: const int SD_CHIP_SELECT = 10;  →
+// const int SD_CHIP_SELECT = 10;  →
 const int SD_CHIP_SELECT = <GPIO elegido>;
 ```
 
@@ -85,15 +94,16 @@ Herramientas → Monitor Serie, **9600 baudios**. Apretar RESET en la placa. Deb
    - `AW9523 not found? Check wiring!` → ídem para el driver.
    - `Error opening file!` → SD ausente, mal formateada (usar FAT32) o CS incorrecto.
 2. `AW9523 found!` (si aplica).
-3. `Begin chlorophyll measurements.` + LED azul encendido (se ve por la ranura de la cubeta si la tapa está abierta) + barra de progreso `Chlorophyll-a: [###...] 42%` + líneas `Raw F8: <número>`.
-4. Al minuto: `End chlorophyll measurements.` → `Begin turbidity measurements.` + LED IR encendido (⚠️ el IR es invisible al ojo; se ve **con la cámara del celular**, que lo capta violáceo) + líneas `Raw NIR: <número>`.
-5. Al final: bloque `==== FINAL AVERAGE RESULTS ====` con los promedios.
+3. `Begin background measurements.` + **todos los LEDs apagados** + barra de progreso `Background: [###...] 42%` + líneas `Raw F8:` y `Raw NIR:`. Con la tapa cerrada los valores deben ser ~0; con la tapa abierta suben con la luz del ambiente (sirve como prueba rápida de que la tapa sella la luz).
+4. Al minuto: `End background measurements.` → `Begin chlorophyll measurements.` + LED azul encendido (se ve por la ranura de la cubeta si la tapa está abierta) + líneas `Raw F8: <número>`.
+5. Al minuto: `End chlorophyll measurements.` → `Begin turbidity measurements.` + LED IR encendido (⚠️ el IR es invisible al ojo; se ve **con la cámara del celular**, que lo capta violáceo) + líneas `Raw NIR: <número>`.
+6. Al final: bloque `==== FINAL AVERAGE RESULTS ====` con promedios, fondo restado y valores calibrados de clorofila y turbidez.
 
-6. Apagar, sacar la microSD, abrirla en la PC: debe existir `Test.csv` con encabezado, ~2 minutos de filas de datos y el bloque `SUMMARY` al final. ⚠️ El firmware **agrega** al mismo `Test.csv` en cada corrida: para cada ensayo nuevo conviene borrar o renombrar el archivo previo.
+7. Apagar, sacar la microSD, abrirla en la PC: debe existir `Test AAAA-MM-DD.csv` (con la fecha del día) con encabezado, ~3 minutos de filas de datos y el bloque `SUMMARY` al final. ⚠️ El firmware **agrega** al archivo del día en cada corrida: entre corridas del mismo día, identificar cada ensayo por su hora (columna de fecha/hora) o renombrar el archivo previo.
 
 ## 6. Ajuste del RTC (fecha y hora)
 
-El firmware original **no pone en hora el RTC** (solo avisa si no corre). Para ponerlo en hora una única vez: cargar el ejemplo `RTClib → pcf8523` (o `ds3231`) del IDE, que ajusta el reloj a la hora de compilación, y después volver a flashear el firmware de la sonda. Con la pila puesta, la hora se conserva.
+Si el RTC está sin inicializar o perdió la hora (pila agotada), el firmware **lo ajusta solo a la fecha y hora de compilación** del .ino. Alcanza con compilar y flashear con la PC en hora: la primera corrida deja el reloj puesto, y con la pila colocada la hora se conserva. Si el reloj quedara con hora vieja (p. ej. se flasheó un binario compilado días atrás), re-flashear recién compilado.
 
 ## 7. Parámetros del sensor (no tocar sin motivo)
 
