@@ -117,7 +117,7 @@
 
 - **Original:** [`planos/gabinete-dockeye-v9.stl`](planos/gabinete-dockeye-v9.stl) (la **v9** de DockEye, la más reciente; iteraciones anteriores en `vendor/DockEye/Hardware/Housing/`). Sostiene la cubeta, los LEDs y el sensor en la geometría de 90° correcta y bloquea la luz ambiente.
 - **Impresión:** PLA o PETG **NEGRO opaco** (crítico: el gabinete es la cámara oscura del instrumento), relleno ≥50% en la zona óptica (criterio tomado del manual ENSSAT). Verificado 2026-09-21: los servicios de impresión 3D en ML publican **"precio a convenir"** (se cotiza con el STL en mano) — hay varios en CABA/GBA, incluido **"Delta 3D Lab" en Tigre**. Referencia de insumo: filamento PLA negro $18.990/kg (Hellbot, local) → una pieza de ~100 g debería rondar **ARS 15.000–30.000**, a confirmar cotizando con el STL.
-- ⚠️ **La tapa solo está como `Open-Fluorometer-Lid v2.f3d`** (archivo Fusion 360, no STL). **A VERIFICAR:** exportar el STL desde Fusion 360 (gratis para uso personal) o resolver una tapa simple equivalente (una placa opaca que cierre bien a la luz). 
+- ✅ **Tapa resuelta:** [`planos/tapa-v1.stl`](planos/tapa-v1.stl) (diseño original de Esteban Kovacevic, CC BY-SA — la tapa de DockEye solo existe como `.f3d` de Fusion 360 y no era imprimible tal cual).
 - **El gabinete se imprime en 3D, sin excepción** (decisión de proyecto 2026-09-21): es LO que garantiza la geometría LED-cubeta-sensor y es la parte fácil/barata (servicio de impresión). Sin impresora propia, mandar a imprimir el STL.
 
 ### C2. Tornillería y varios
